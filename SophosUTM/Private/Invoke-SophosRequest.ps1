@@ -4,7 +4,7 @@ function Invoke-SophosRequest{
     [String]$Uri,
     [Parameter(Mandatory=$true, Position=2)]
     [Microsoft.PowerShell.Commands.WebRequestMethod]$Method,
-    [Parameter(Mandatory=$true, Position=3)]
+    [Parameter(Mandatory=$false, Position=3)]
     [string]$ApiToken,
     [Parameter(Mandatory=$false, Position=4)]
     [String]$Body,
@@ -22,13 +22,16 @@ function Invoke-SophosRequest{
         if ($null -ne $body -and $body -ne ""){
             $parameters.Add("Body", "$Body")
         }
+        if ($null -ne $ApiToken -and $ApiToken -ne ""){
+            $credential = New-Object System.Management.Automation.PSCredential "token", (ConvertTo-SecureString -AsPlainText $ApiToken -Force)
+            $parameters.Add("Credential", $credential)
+        }
         if ($null -ne $headers -and $headers.count -ne 0){
             Invoke-RestMethod @parameters -Headers $Headers
         } else {
             # use @ to "splat" the parameters so they get passed as flags to the request
             Invoke-RestMethod @parameters
         }
-        
     }
 
     # try to submit the request, if it fails because of an untrusted certificate ask if we should ignore certificate warnings

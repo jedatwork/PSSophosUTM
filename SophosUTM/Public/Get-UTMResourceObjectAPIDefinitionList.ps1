@@ -28,13 +28,11 @@ function Get-UTMResourceObjectAPIDefinitionList{
     [ValidateSet("GET", "PUT", "POST", "ALL")]
     [string]$MethodType
     )
-    $request = Invoke-SophosRequest -Uri"$SophosBaseURL/api/definitions/$ResourceName" -Method GET
-
-    $results = ConvertFrom-Json $request
+    $request = Invoke-SophosRequest -Uri "$SophosBaseURL/api/definitions/$ResourceName" -Method GET
 
     if ($MethodType -eq "ALL"){
-        return $results.paths.$ObjectPath
+        return $request.paths.$ObjectPath
     } else {
-        return $results.paths.$ObjectPath.$MethodType
+        return $request.paths.$ObjectPath.$MethodType
     }
 }

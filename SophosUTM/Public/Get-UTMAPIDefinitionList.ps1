@@ -23,5 +23,5 @@ function Get-UTMAPIDefinitionList{
     )
     $request = Invoke-SophosRequest -Uri "$SophosBaseURL/api/definitions" -Method GET
 
-    return (ConvertFrom-Json $request).name
+    return $request.name
 }
